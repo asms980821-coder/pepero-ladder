@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>빼빼로를 모아라!</title>
+<meta name="theme-color" content="#fde9ee">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="빼빼로 모아라">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jua&family=Gaegu:wght@700&family=Gowun+Dodum&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* 레이아웃: 포스터형 한 줄 세로 구성 — 하트 낙서 히어로 → 구름 말풍선 안내 → 방 카드 → 핑크 사다리. 연분홍 단일 테마 */
+:root{
+  --bg:#fde9ee; --bg2:#fff6f8; --panel:#fffafb; --line:#f5c3cf; --fg:#4a2a22; --muted:#9a6b70;
+  --choco:#5a2e22; --choco2:#7a4232; --pink:#e8457a; --pink2:#f39ab5; --pink3:#ffd9e4;
+  --biscuit:#e2b06a; --fruit:#fff1c7; --fruit-ink:#946400; --sprout:#e5f3d8; --sprout-ink:#41702a;
+  --gold:#d79a12; --silver:#8a93a3; --bronze:#b06a3a; --win:#ffe07a;
+  --display:"Jua","Gowun Dodum",system-ui,sans-serif;
+  --hand:"Gaegu","Gowun Dodum",cursive;
+  --body:"Gowun Dodum",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.55;padding:18px 16px 56px;
+  background:var(--bg);
+  background-image:radial-gradient(circle at 12% 8%,#fff 0,transparent 32%),radial-gradient(circle at 90% 30%,#ffe3ea 0,transparent 30%),radial-gradient(circle at 50% 100%,#f9cfdb 0,transparent 45%);
+  background-attachment:fixed}
+.wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+[hidden]{display:none!important}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--pink2);outline-offset:2px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.back{background:none;border:0;color:var(--choco2);font-family:var(--display);font-size:16px;padding:6px 0}
+.adminbtn{background:rgba(255,255,255,.7);border:1.5px solid var(--pink2);color:var(--pink);border-radius:999px;padding:4px 14px;font-size:13px;font-weight:700}
+.card{background:var(--panel);border:2px solid var(--pink3);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px;box-shadow:0 6px 0 var(--pink3)}
+.card strong{font-family:var(--display);font-weight:400;font-size:18px;color:var(--choco)}
+.err{color:var(--pink);font-size:14px;margin:0;min-height:1em;font-weight:700}
+input{font:inherit;font-size:16px;padding:11px 13px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg2);color:var(--fg);width:100%}
+input::placeholder{color:#c79aa3}
+label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:700}
+.btn{font-family:var(--display);font-size:20px;border:0;border-radius:999px;padding:12px 22px;background:var(--pink);color:#fff;box-shadow:0 4px 0 #b92f5d}
+.btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b92f5d}
+.btn.sm{font-family:var(--body);font-weight:700;font-size:14px;padding:8px 16px;box-shadow:0 3px 0 #b92f5d}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.heart{display:inline-block;width:22px;height:20px;vertical-align:middle}
+.heart path{fill:none;stroke:var(--pink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.heart.fill path{fill:var(--pink)}
+
+/* ===== 1페이지: 포스터 ===== */
+.hero{position:relative;text-align:center;padding:6px 0 4px;display:flex;flex-direction:column;align-items:center;gap:0}
+.month{font-family:var(--hand);font-size:clamp(34px,9vw,46px);color:var(--pink);margin:0;line-height:1;display:flex;align-items:center;gap:10px}
+.month-line{width:150px;height:6px;border-radius:6px;background:var(--pink);opacity:.85;margin:6px 0 10px;transform:rotate(-1.5deg)}
+.hero h1{margin:0;display:flex;flex-direction:column;align-items:center;font-family:var(--display);font-weight:400;line-height:1.02;letter-spacing:-.02em}
+.hero h1 span{--o:#fff;text-shadow:0 3px 0 var(--o),3px 0 0 var(--o),-3px 0 0 var(--o),0 -3px 0 var(--o),2px 2px 0 var(--o),-2px -2px 0 var(--o),2px -2px 0 var(--o),-2px 2px 0 var(--o),0 7px 12px rgba(122,66,50,.22)}
+.hero .l1{font-size:clamp(62px,18vw,104px);color:var(--choco)}
+.hero .l2{font-size:clamp(46px,13.5vw,78px);color:var(--pink)}
+.hero .l3{font-size:clamp(34px,9vw,52px);color:var(--choco2);display:flex;align-items:center;gap:10px}
+.tagline{position:absolute;right:0;top:0;font-family:var(--hand);font-size:17px;line-height:1.25;color:var(--choco2);text-align:left;transform:rotate(-6deg);max-width:9em}
+@media (max-width:520px){.tagline{position:static;transform:none;text-align:center;max-width:none;margin-top:6px}}
+.doodle{position:absolute;color:var(--pink)}
+.d1{left:4%;top:34%}.d2{right:6%;top:58%}.d3{left:14%;top:78%}
+.sticks{position:absolute;inset:0;pointer-events:none}
+.stick{position:absolute;width:16px;height:150px;border-radius:9px;
+  background:linear-gradient(var(--c,var(--choco)) 0 66%,var(--biscuit) 66% 100%)}
+.stick::after{content:"";position:absolute;left:0;right:0;top:0;height:66%;border-radius:9px;
+  background-image:radial-gradient(circle,var(--dot,#e7b46b) 2px,transparent 2.5px);background-size:8px 9px}
+.s1{left:-2px;top:44%;transform:rotate(-14deg)}
+.s2{left:22px;top:40%;transform:rotate(-6deg);--c:#f4a3b9;--dot:#e2466f}
+.s3{right:22px;top:43%;transform:rotate(10deg);--dot:#3a1c14}
+.s4{right:-2px;top:47%;transform:rotate(16deg);--dot:transparent}
+@media (max-width:520px){.sticks{display:none}}
+
+.cloud{position:relative;background:#fff;border:2.5px solid var(--pink2);border-radius:42px 38px 46px 40px / 36px 44px 38px 46px;
+  padding:20px 16px 18px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:0 6px 0 var(--pink3)}
+.cloud .big{font-family:var(--hand);font-size:26px;color:var(--choco);margin:0;line-height:1.1}
+.pill{display:inline-block;background:var(--pink);color:#fff;font-family:var(--display);font-size:clamp(18px,5vw,22px);padding:6px 18px;border-radius:999px;transform:rotate(-1deg)}
+.cloud p{margin:0}
+.cloud .tax{font-size:13px;color:var(--muted)}
+
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.room{border-radius:24px;overflow:hidden;border:2.5px solid var(--pink3);background:#fff;display:flex;flex-direction:column;min-width:0;box-shadow:0 6px 0 var(--pink3)}
+.room .go{border:0;padding:26px 8px 22px;font-family:var(--display);font-size:clamp(20px,5.4vw,26px);display:flex;flex-direction:column;align-items:center;gap:4px}
+.room .go small{font-family:var(--hand);font-size:17px;opacity:.9}
+.room .go:hover{filter:brightness(.98)}
+.room.fruit .go{background:var(--fruit);color:var(--fruit-ink)}
+.room.sprout .go{background:var(--sprout);color:var(--sprout-ink)}
+.room .rank{padding:12px 12px 14px;display:flex;flex-direction:column;gap:4px;text-align:center}
+.room .rank h3{margin:0 0 2px;font-family:var(--display);font-weight:400;font-size:17px;color:var(--choco)}
+.room ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;font-size:14px;font-variant-numeric:tabular-nums}
+.room ol li b{font-family:var(--display);font-weight:400;margin-right:5px}
+.room ol li.r1 b{color:var(--gold)}.room ol li.r2 b{color:var(--silver)}.room ol li.r3 b{color:var(--bronze)}
+.room .more{background:none;border:0;color:var(--pink);font-size:12px;font-weight:700;text-decoration:underline;padding:4px 0 0}
+.full{margin-top:6px;max-height:260px;overflow:auto;text-align:left;font-size:13px}
+.updated{text-align:center;font-size:12px;color:var(--muted);margin:0}
+
+/* ===== 2페이지: 사다리 ===== */
+.ptitle{text-align:center;font-family:var(--display);font-weight:400;font-size:clamp(30px,8vw,40px);margin:0;color:var(--pink);
+  --o:#fff;text-shadow:0 3px 0 var(--o),3px 0 0 var(--o),-3px 0 0 var(--o),0 -3px 0 var(--o),0 6px 10px rgba(122,66,50,.18)}
+.hello{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.hello p{margin:0;font-family:var(--display);font-size:18px;color:var(--choco)}
+.link{background:none;border:0;color:var(--muted);text-decoration:underline;font-size:13px}
+.stats{display:flex;gap:10px}
+.stat{flex:1;background:var(--bg2);border:1.5px solid var(--pink3);border-radius:16px;padding:8px 12px;display:flex;flex-direction:column}
+.stat span{font-size:12px;color:var(--muted);font-weight:700}
+.stat b{font-family:var(--display);font-weight:400;font-size:26px;color:var(--choco);font-variant-numeric:tabular-nums}
+.bubble{align-self:flex-end;margin:0 6px -4px 0;background:var(--pink);color:#fff;font-family:var(--hand);font-size:17px;line-height:1.1;padding:6px 14px;border-radius:18px;position:relative}
+.bubble::after{content:"";position:absolute;left:22px;bottom:-7px;border:8px solid transparent;border-top-color:var(--pink);border-bottom:0}
+.ladder{display:flex;flex-direction:column;background:#fff;border:2.5px solid var(--pink3);border-radius:24px;padding:14px 8px 16px}
+.picks,.ends{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;text-align:center}
+.picks button{border:0;background:none;color:var(--choco);padding:0;font-family:var(--display);font-size:15px;word-break:keep-all;display:flex;flex-direction:column;align-items:center;gap:4px}
+.picks button .ic{width:62px;height:62px;border-radius:50%;background:var(--pink3);border:2.5px solid var(--pink2);display:grid;place-items:center;font-size:30px;line-height:1;transition:transform .15s}
+.picks button:hover:not(:disabled) .ic{transform:scale(1.07)}
+.picks button.chosen .ic{background:var(--pink);border-color:var(--pink)}
+.picks button.chosen{color:var(--pink)}
+.picks button:disabled{cursor:default}
+.ladder svg{display:block;width:100%;height:auto}
+.rail,.rung{stroke:var(--pink2);stroke-width:5;stroke-linecap:round}
+.path{fill:none;stroke:var(--choco);stroke-width:8;stroke-linecap:round;stroke-linejoin:round}
+.ends div{justify-self:center;width:72px;min-height:62px;border-radius:999px;display:grid;place-items:center;padding:4px 6px;
+  background:#fff;border:2.5px solid var(--pink2);color:var(--pink);font-family:var(--display);font-size:15px;line-height:1.1;text-align:center;transition:background .3s}
+.ends div.win{background:var(--win);border-color:var(--gold);color:var(--choco);width:96px;font-size:14px;word-break:keep-all}
+.ends div.lose{color:var(--muted);border-color:var(--line)}
+.ends div.hit{box-shadow:0 0 0 4px var(--pink)}
+.result{text-align:center;font-family:var(--display);font-weight:400;font-size:32px;margin:0;min-height:1.2em;color:var(--pink)}
+.hint{text-align:center;color:var(--muted);margin:0;font-size:14px}
+.note{margin:0;font-size:13px;color:var(--muted)}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form .full2{grid-column:1/-1}
+@media (max-width:440px){.form{grid-template-columns:1fr}}
+
+/* ===== 관리자 ===== */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:#fff;border:2px solid var(--pink3);padding:4px;border-radius:999px}
+.seg button{border:0;border-radius:999px;padding:9px 0;background:transparent;color:var(--muted);font-family:var(--display);font-size:16px}
+.seg button[aria-selected="true"].fruit{background:var(--fruit);color:var(--fruit-ink)}
+.seg button[aria-selected="true"].sprout{background:var(--sprout);color:var(--sprout-ink)}
+.sumrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media (max-width:480px){.sumrow{grid-template-columns:repeat(2,1fr)}}
+.inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.inline input{width:80px}
+.tablewrap{overflow-x:auto;border:2px solid var(--pink3);border-radius:16px;background:#fff}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:13px;font-variant-numeric:tabular-nums}
+th{background:var(--pink3);text-align:left;padding:8px;font-size:12px;color:var(--choco);white-space:nowrap}
+td{padding:6px 8px;border-top:1px solid var(--line);vertical-align:middle;white-space:nowrap}
+td input{width:100%;min-width:70px;font-size:13px;padding:6px 8px;border-radius:8px}
+td input.num{width:60px;min-width:0}
+td .mono{font-family:var(--mono)}
+td .acts{display:flex;gap:4px}
+td .acts button{border:1px solid var(--line);background:#fff;color:var(--fg);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:700}
+td .acts button.del{color:var(--pink)}
+td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pink)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--choco);color:#fff;padding:10px 18px;border-radius:999px;font-weight:700;font-size:14px}
+@media (prefers-reduced-motion:reduce){.ends div,.picks button .ic{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ========== 1페이지 ========== -->
+  <div id="vHome">
+    <div class="topbar"><span></span><button class="adminbtn" id="toAdmin">관리자</button></div>
+    <div class="hero">
+      <div class="sticks" aria-hidden="true"><i class="stick s1"></i><i class="stick s2"></i><i class="stick s3"></i><i class="stick s4"></i></div>
+      <span class="doodle d1"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg></span><span class="doodle d2"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg></span><span class="doodle d3"><svg class="heart fill" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg></span>
+      <p class="month"><svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg> 11월 <svg class="heart" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg></p>
+      <div class="month-line" aria-hidden="true"></div>
+      <h1><span class="l1">빼빼로</span><span class="l2">사다리 타기</span><span class="l3"><svg class="heart fill" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg>이벤트<svg class="heart fill" viewBox="0 0 24 22" aria-hidden="true"><path d="M12 20s-8-5.2-8-11.2A4.6 4.6 0 0 1 12 6a4.6 4.6 0 0 1 8 2.8C20 14.8 12 20 12 20z"/></svg></span></h1>
+      <p class="tagline">달콤한 빼빼로와 함께<br>행운을 잡아보세요!</p>
+    </div>
+    <div class="cloud">
+      <p class="big">11월 통 이벤트!</p>
+      <span class="pill">빼빼로를 모아라!</span>
+      <p>빼빼로 개수가 많은 순서대로 경품 지급</p>
+      <p class="tax">경품 5만원 이상 시 제세공과금 지급 안내 예정</p>
+    </div>
+    <div class="rooms" id="rooms"></div>
+    <p class="updated" id="updated"></p>
+  </div>
+
+  <!-- ========== 2페이지: 사다리 ========== -->
+  <div id="vRoom" hidden>
+    <div class="topbar"><button class="back" id="backHome">← 처음으로</button><span></span></div>
+    <h2 class="ptitle" id="roomTitle"></h2>
+
+    <div class="card" id="login">
+      <strong>정보 입력</strong>
+      <div class="form">
+        <label for="inName">성함 *<input id="inName" autocomplete="name"></label>
+        <label for="inPhone">연락처 (휴대폰) *<input id="inPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678 (- 없어도 돼요)"></label>
+        <label for="inTt" class="full2">틱톡 아이디 *<input id="inTt" autocapitalize="off" autocorrect="off" placeholder="아이디만 입력 (예: offair_kr)"></label>
+      </div>
+      <p class="note">처음이면 이 정보로 자동 등록돼요. 다음부터는 같은 성함과 연락처로 들어오면 내 기록이 이어져요. 연락처와 틱톡 아이디는 공개되지 않아요.</p>
+      <button class="btn" id="btnLogin">입장하기</button>
+      <p class="err" id="loginErr"></p>
+    </div>
+
+    <div class="card" id="play" hidden>
+      <div class="hello"><p id="hello"></p><button class="link" id="btnOut">다른 이름으로</button></div>
+      <div class="stats">
+        <div class="stat"><span>남은 사다리</span><b id="stRemain">0</b></div>
+        <div class="stat"><span>모은 빼빼로</span><b id="stPep">0</b></div>
+      </div>
+      <div class="ladder" id="ladderBox">
+        <span class="bubble">어떤 빼빼로가<br>나올까?!</span>
+        <div class="picks" id="picks"></div>
+        <svg id="svg" viewBox="0 0 300 260" aria-label="사다리"></svg>
+        <div class="ends" id="ends"><div>🎁</div><div>🎁</div><div>🎁</div></div>
+      </div>
+      <p class="result" id="result"></p>
+      <p class="hint" id="hint"></p>
+      <button class="btn" id="btnNext" hidden>다음 사다리</button>
+      <p class="err" id="playErr"></p>
+    </div>
+  </div>
+
+  <!-- ========== 관리자 ========== -->
+  <div id="vAdmin" hidden>
+    <div class="topbar"><button class="back" id="backHome2">← 처음으로</button><button class="link" id="adminOut" hidden>관리자 나가기</button></div>
+    <h2 class="ptitle">관리자</h2>
+
+    <div class="card" id="adminLogin">
+      <label for="inPw">관리자 비밀번호<input id="inPw" type="password" autocomplete="current-password"></label>
+      <button class="btn" id="btnPw">확인</button>
+      <p class="err" id="pwErr"></p>
+    </div>
+
+    <div id="adminMain" hidden style="display:flex;flex-direction:column;gap:14px">
+      <div class="seg" id="adminSeg" role="tablist"></div>
+
+      <div class="sumrow">
+        <div class="stat"><span>참가자</span><b id="sPeople">0</b></div>
+        <div class="stat"><span>지급한 사다리</span><b id="sGranted">0</b></div>
+        <div class="stat"><span>사용한 사다리</span><b id="sUsed">0</b></div>
+        <div class="stat"><span>나갈 빼빼로</span><b id="sPep">0</b></div>
+      </div>
+
+      <div class="card">
+        <strong>참가자 직접 등록</strong>
+        <p class="note">크리에이터가 앱에서 직접 입장하면 자동으로 등록돼요. 미리 등록해두고 싶을 때만 쓰세요.</p>
+        <div class="form">
+          <label for="aName">이름<input id="aName"></label>
+          <label for="aGranted">사다리 횟수<input id="aGranted" type="number" min="0" value="3"></label>
+          <label for="aTt">틱톡 아이디 (선택)<input id="aTt" autocapitalize="off" placeholder="예: offair_kr"></label>
+          <label for="aPhone">연락처<input id="aPhone" inputmode="tel" placeholder="01012345678"></label>
+        </div>
+        <button class="btn sm" id="btnAdd">등록</button>
+        <p class="err" id="addErr"></p>
+      </div>
+
+      <div class="card">
+        <strong>이 방 전원에게 사다리 추가</strong>
+        <div class="inline">
+          <input id="allN" type="number" min="1" value="1" aria-label="추가할 횟수">
+          <span>번씩</span>
+          <button class="btn sm" id="btnAll">전원 추가</button>
+        </div>
+      </div>
+
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>성함</th><th>틱톡 아이디</th><th>연락처</th><th>지급</th><th>사용</th><th>남음</th><th>빼빼로</th><th>관리</th></tr></thead>
+          <tbody id="aBody"></tbody>
+        </table>
+      </div>
+      <p class="err" id="tableErr"></p>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+// ★ 구글 앱스 스크립트 웹앱 주소 (배포 후 받은 .../exec 주소로 바꿔주세요)
+const API_URL = 'https://script.google.com/macros/s/AKfycbyhwyqRuD--n9RIpu47RVdrj4PbOgoEOS-m4Vzg4-Fl_ndSOJJ5StLgI62iIuLWzDZx/exec';
+
+const ROOMS = { fruit: '열매방', sprout: '새싹방' };
+const ANIMALS = ['병아리', '악어', '티라노사우루스'];
+const APP_URL = location.origin;
+const ICONS = ['🐥', '🐊', '🦖'];
+const X = [50, 150, 250], TOP = 8, BOT = 252;
+
+const $ = id => document.getElementById(id);
+let room = null, me = null, cred = null, ticket = null, busy = false;
+let pw = null, adminRoom = 'fruit', adminData = null, homeTimer = null;
+
+async function call(fn, ...args) {
+  let res;
+  try {
+    res = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ fn, args }) });
+  } catch (e) { throw new Error('인터넷 연결을 확인하고 다시 시도해주세요.'); }
+  let j;
+  try { j = await res.json(); } catch (e) { throw new Error('서버 응답이 올바르지 않아요. 잠시 후 다시 시도해주세요.'); }
+  if (!j.ok) throw new Error(j.error || '요청을 처리하지 못했어요.');
+  return j.data;
+}
+function ss(k, v) { try { v === undefined ? 0 : v === null ? sessionStorage.removeItem(k) : sessionStorage.setItem(k, JSON.stringify(v)); return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } }
+function ls(k, v) { try { if (v === null) localStorage.removeItem(k); else if (v !== undefined) localStorage.setItem(k, JSON.stringify(v)); return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(t._h); t._h = setTimeout(() => t.hidden = true, 1800); }
+function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+function show(v) {
+  ['vHome', 'vRoom', 'vAdmin'].forEach(id => $(id).hidden = id !== v);
+  clearInterval(homeTimer);
+  if (v === 'vHome') { loadHome(); homeTimer = setInterval(loadHome, 20000); }
+  window.scrollTo(0, 0);
+}
+
+// ================= 1페이지 =================
+$('rooms').innerHTML = Object.keys(ROOMS).map(k => `
+  <div class="room ${k}">
+    <button class="go" data-room="${k}">${ROOMS[k]} 이벤트<small>사다리 타러 가기 ♥</small></button>
+    <div class="rank">
+      <h3>${ROOMS[k]} 순위</h3>
+      <ol id="top_${k}"><li>불러오는 중…</li></ol>
+      <button class="more" data-more="${k}">전체 순위 보기</button>
+      <ol class="full" id="full_${k}" hidden></ol>
+    </div>
+  </div>`).join('');
+$('rooms').addEventListener('click', e => {
+  const g = e.target.closest('[data-room]');
+  if (g) return openRoom(g.dataset.room);
+  const m = e.target.closest('[data-more]');
+  if (m) { const f = $('full_' + m.dataset.more); f.hidden = !f.hidden; m.textContent = f.hidden ? '전체 순위 보기' : '전체 순위 접기'; }
+});
+
+async function loadHome() {
+  try {
+    const d = await call('api_home');
+    Object.keys(ROOMS).forEach(k => {
+      const list = d.rooms[k] || [];
+      const top = [0, 1, 2].map(i => {
+        const x = list[i];
+        return `<li class="r${i + 1}"><b>${i + 1}등</b>${x ? esc(x.n) + ' ' + x.p + '개' : '-'}</li>`;
+      }).join('');
+      $('top_' + k).innerHTML = top;
+      $('full_' + k).innerHTML = list.length
+        ? list.map((x, i) => `<li><b>${i + 1}</b> ${esc(x.n)} 빼빼로 ${x.p}개 수집중!</li>`).join('')
+        : '<li>아직 참가자가 없어요</li>';
+    });
+    $('updated').textContent = (d.closed ? '이벤트 마감 · ' : '') + d.updated + ' 기준 · 같은 개수면 먼저 모은 사람이 앞';
+  } catch (e) { $('updated').textContent = '순위를 불러오지 못했어요. 잠시 후 다시 볼게요.'; }
+}
+
+// ================= 2페이지 =================
+$('picks').innerHTML = ANIMALS.map((a, i) => `<button data-l="${i}"><span class="ic" aria-hidden="true">${ICONS[i] || ''}</span>${a}</button>`).join('');
+
+function openRoom(k) {
+  room = k;
+  $('roomTitle').textContent = ROOMS[k] + ' 사다리 타기';
+  $('roomTitle').className = 'ptitle ' + k;
+  me = null; cred = null;
+  $('login').hidden = false; $('play').hidden = true; $('loginErr').textContent = '';
+  const saved = ls('cred_' + k);
+  $('inName').value = saved ? saved.name : '';
+  $('inPhone').value = saved ? saved.phone : '';
+  $('inTt').value = saved ? saved.tt : '';
+  show('vRoom');
+  if (saved) login();
+}
+$('backHome').onclick = () => show('vHome');
+
+async function login() {
+  const c = { name: $('inName').value.trim(), phone: $('inPhone').value.trim(), tt: $('inTt').value.trim() };
+  $('loginErr').textContent = ''; $('btnLogin').disabled = true;
+  try {
+    me = await call('api_login', room, c);
+    cred = c; ls('cred_' + room, cred);
+    $('login').hidden = true; $('play').hidden = false;
+    renderMe(); await newLadder();
+  } catch (e) { $('loginErr').textContent = e.message; ls('cred_' + room, null); }
+  finally { $('btnLogin').disabled = false; }
+}
+$('btnLogin').onclick = login;
+$('inTt').addEventListener('keydown', e => { if (e.key === 'Enter') login(); });
+$('btnOut').onclick = () => { ls('cred_' + room, null); openRoom(room); ['inName', 'inPhone', 'inTt'].forEach(id => $(id).value = ''); };
+
+function renderMe() {
+  $('hello').textContent = me.name + '님, 반가워요!';
+  $('stRemain').textContent = me.remain;
+  $('stPep').textContent = me.pepero;
+}
+
+function drawLadder(rs) {
+  const step = (BOT - TOP) / (rs.length + 1);
+  let s = X.map(x => `<line class="rail" x1="${x}" y1="${TOP}" x2="${x}" y2="${BOT}"/>`).join('');
+  rs.forEach((r, i) => { if (r) { const y = TOP + step * (i + 1); s += `<line class="rung" x1="${X[r - 1]}" y1="${y}" x2="${X[r]}" y2="${y}"/>`; } });
+  $('svg').innerHTML = s;
+}
+function pathPoints(rs, pos) {
+  const step = (BOT - TOP) / (rs.length + 1);
+  const pts = [[X[pos], TOP]];
+  rs.forEach((r, i) => {
+    const y = TOP + step * (i + 1);
+    let np = pos;
+    if (r === 1 && pos <= 1) np = 1 - pos; else if (r === 2 && pos >= 1) np = 3 - pos;
+    if (np !== pos) { pts.push([X[pos], y], [X[np], y]); pos = np; }
+  });
+  pts.push([X[pos], BOT]);
+  return pts;
+}
+function resetLadder() {
+  [...$('ends').children].forEach(d => { d.className = ''; d.textContent = '🎁'; });
+  [...$('picks').children].forEach(b => { b.classList.remove('chosen'); b.disabled = false; });
+  $('result').textContent = '';
+}
+async function newLadder() {
+  $('playErr').textContent = ''; $('btnNext').hidden = true; resetLadder();
+  if (me.closed) return endState('이벤트가 끝났어요. 참여해주셔서 감사합니다!');
+  if (me.remain <= 0) return endState(me.isNew || (me.pepero === 0 && !me.played)
+    ? '등록 완료! 담당자가 사다리를 지급하면 여기서 바로 탈 수 있어요.'
+    : '받은 사다리를 다 탔어요. 첫 화면에서 순위를 확인해보세요!');
+  $('ladderBox').hidden = false;
+  $('hint').textContent = '줄을 하나 골라주세요';
+  [...$('picks').children].forEach(b => b.disabled = true);
+  try {
+    const r = await call('api_prepare', room, cred);
+    ticket = r.ticket; drawLadder(r.rungs);
+    [...$('picks').children].forEach(b => b.disabled = false);
+  } catch (e) { $('playErr').textContent = e.message; }
+}
+function endState(msg) { $('ladderBox').hidden = true; $('hint').textContent = msg; }
+
+$('picks').addEventListener('click', async e => {
+  const b = e.target.closest('button');
+  if (!b || busy || !ticket) return;
+  busy = true;
+  const line = Number(b.dataset.l);
+  [...$('picks').children].forEach(x => x.disabled = true);
+  b.classList.add('chosen');
+  $('hint').textContent = '사다리 타는 중…';
+  try {
+    const r = await call('api_play', room, cred, ticket, line);
+    ticket = null;
+    await animate(pathPoints(r.rungs, line));
+    r.bottom.forEach((v, i) => {
+      const d = $('ends').children[i];
+      d.textContent = v === 'P' ? '빼빼로 당첨!' : '꽝';
+      d.classList.add(v === 'P' ? 'win' : 'lose');
+      if (i === r.end) d.classList.add('hit');
+    });
+    $('result').textContent = r.win ? '빼빼로 당첨! 🎉' : '아쉽게 꽝!';
+    me = r.me; me.played = true; renderMe();
+    $('hint').textContent = me.remain > 0 ? `남은 사다리 ${me.remain}번` : '받은 사다리를 다 탔어요!';
+    $('btnNext').hidden = me.remain <= 0;
+    $('btnNext').textContent = '다음 사다리';
+  } catch (err) {
+    $('playErr').textContent = err.message;
+    $('btnNext').hidden = false; $('btnNext').textContent = '새 사다리 받기';
+    try { me = await call('api_login', room, cred); renderMe(); } catch (e2) {}
+  } finally { busy = false; }
+});
+$('btnNext').onclick = newLadder;
+
+function animate(pts) {
+  return new Promise(done => {
+    const pl = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+    pl.setAttribute('class', 'path');
+    pl.setAttribute('points', pts.map(p => p.join(',')).join(' '));
+    $('svg').appendChild(pl);
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return done();
+    const len = pl.getTotalLength();
+    pl.style.strokeDasharray = len; pl.style.strokeDashoffset = len;
+    pl.getBoundingClientRect();
+    pl.style.transition = 'stroke-dashoffset 1.8s ease-in-out';
+    pl.style.strokeDashoffset = 0;
+    setTimeout(done, 1850);
+  });
+}
+
+// ================= 관리자 =================
+$('toAdmin').onclick = () => {
+  show('vAdmin');
+  pw = ss('pw');
+  if (pw) enterAdmin(); else { $('adminLogin').hidden = false; $('adminMain').hidden = true; $('adminOut').hidden = true; $('inPw').value = ''; }
+};
+$('backHome2').onclick = () => show('vHome');
+$('adminOut').onclick = () => { pw = null; ss('pw', null); $('toAdmin').click(); };
+
+async function enterAdmin() {
+  $('pwErr').textContent = '';
+  try {
+    await call('api_admin_check', pw);
+    ss('pw', pw);
+    $('adminLogin').hidden = true; $('adminMain').hidden = false; $('adminOut').hidden = false;
+    renderSeg(); await loadAdmin();
+  } catch (e) { $('pwErr').textContent = e.message; ss('pw', null); $('adminLogin').hidden = false; $('adminMain').hidden = true; }
+}
+$('btnPw').onclick = () => { pw = $('inPw').value; enterAdmin(); };
+$('inPw').addEventListener('keydown', e => { if (e.key === 'Enter') $('btnPw').click(); });
+
+function renderSeg() {
+  $('adminSeg').innerHTML = Object.keys(ROOMS).map(k =>
+    `<button class="${k}" role="tab" data-k="${k}" aria-selected="${k === adminRoom}">${ROOMS[k]}</button>`).join('');
+}
+$('adminSeg').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  adminRoom = b.dataset.k; renderSeg(); loadAdmin();
+});
+
+async function adminCall(fn, ...args) {
+  $('tableErr').textContent = '';
+  try { adminData = await call(fn, pw, adminRoom, ...args); renderAdmin(); return true; }
+  catch (e) { $('tableErr').textContent = e.message; return false; }
+}
+function loadAdmin() { $('aBody').innerHTML = '<tr><td colspan="8">불러오는 중…</td></tr>'; return adminCall('api_admin_list'); }
+
+function renderAdmin() {
+  const d = adminData;
+  $('sPeople').textContent = d.total.people;
+  $('sGranted').textContent = d.total.granted;
+  $('sUsed').textContent = d.total.used;
+  $('sPep').textContent = d.total.pepero;
+  $('aBody').innerHTML = d.list.length ? d.list.map(x => `
+    <tr data-code="${esc(x.code)}">
+      <td><input data-f="name" value="${esc(x.name)}" aria-label="이름"></td>
+      <td><input data-f="tt" value="${esc(x.tt)}" aria-label="틱톡 아이디"></td>
+      <td><input data-f="phone" value="${esc(x.phone)}" aria-label="연락처"></td>
+      <td><input class="num" data-f="granted" type="number" min="${x.used}" value="${x.granted}" aria-label="지급 횟수"></td>
+      <td class="mono">${x.used}</td>
+      <td class="mono">${x.remain}</td>
+      <td class="mono"><b>${x.pepero}</b></td>
+      <td><div class="acts">
+        <button data-a="save">저장</button>
+        <button data-a="plus">+1회</button>
+        <button data-a="copy">안내문 복사</button>
+        <button data-a="del" class="del">삭제</button>
+      </div></td>
+    </tr>`).join('') : `<tr><td colspan="8">${ROOMS[adminRoom]}에 등록된 참가자가 없어요. 위에서 등록해주세요.</td></tr>`;
+}
+
+$('btnAdd').onclick = async () => {
+  $('addErr').textContent = '';
+  const ok = await adminCallWithErr('addErr', 'api_admin_add', $('aName').value, $('aTt').value, $('aPhone').value, $('aGranted').value);
+  if (ok) { ['aName', 'aTt', 'aPhone'].forEach(id => $(id).value = ''); $('aName').focus(); toast('등록했어요'); }
+};
+async function adminCallWithErr(errId, fn, ...args) {
+  try { adminData = await call(fn, pw, adminRoom, ...args); renderAdmin(); return true; }
+  catch (e) { $(errId).textContent = e.message; return false; }
+}
+$('btnAll').onclick = async () => {
+  const n = $('allN').value;
+  if (await adminCall('api_admin_addPlays', '', n)) toast(`${ROOMS[adminRoom]} 전원에게 ${n}번씩 추가했어요`);
+};
+
+$('aBody').addEventListener('click', async e => {
+  const b = e.target.closest('button[data-a]'); if (!b) return;
+  const tr = b.closest('tr'), code = tr.dataset.code, a = b.dataset.a;
+  if (a === 'save') {
+    const f = {};
+    tr.querySelectorAll('input[data-f]').forEach(i => f[i.dataset.f] = i.value);
+    if (await adminCall('api_admin_update', code, f)) toast('저장했어요');
+  } else if (a === 'plus') {
+    if (await adminCall('api_admin_addPlays', code, 1)) toast('사다리 1번 추가했어요');
+  } else if (a === 'copy') {
+    const name = tr.querySelector('[data-f="name"]').value;
+    const msg = `[11월 이벤트 · 빼빼로를 모아라!]\n${name}님, ${ROOMS[adminRoom]} 사다리 이벤트에 초대합니다.\n참여 링크: ${APP_URL}\n첫 화면에서 '${ROOMS[adminRoom]} 이벤트'를 누르고 성함·연락처·틱톡 아이디를 입력해주세요.\n빼빼로를 가장 많이 모은 분께 경품을 드려요!`;
+    try { await navigator.clipboard.writeText(msg); toast('안내문을 복사했어요'); }
+    catch (err) { $('tableErr').textContent = '복사가 막혀 있어요. 아래 문구를 직접 복사해주세요: ' + msg.replace(/\n/g, ' / '); }
+  } else if (a === 'del') {
+    if (!b.classList.contains('sure')) {
+      b.classList.add('sure'); b.textContent = '정말 삭제';
+      setTimeout(() => { b.classList.remove('sure'); b.textContent = '삭제'; }, 3000);
+      return;
+    }
+    if (await adminCall('api_admin_delete', code)) toast('삭제했어요');
+  }
+});
+
+show('vHome');
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+</script>
+</body>
+</html>
