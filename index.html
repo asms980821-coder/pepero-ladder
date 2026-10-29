@@ -46,6 +46,8 @@ label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute
 .btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b92f5d}
 .btn.sm{font-family:var(--body);font-weight:700;font-size:14px;padding:8px 16px;box-shadow:0 3px 0 #b92f5d}
 .btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:#fff;color:var(--pink);border:1.5px solid var(--pink);box-shadow:0 3px 0 var(--pink3)}
+.btn.ghost.sure{background:var(--pink);color:#fff}
 .heart{display:inline-block;width:22px;height:20px;vertical-align:middle}
 .heart path{fill:none;stroke:var(--pink);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 .heart.fill path{fill:var(--pink)}
@@ -251,12 +253,14 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
       </div>
 
       <div class="card">
-        <strong>이 방 전원에게 사다리 추가</strong>
+        <strong>이 방 전원 사다리 조정</strong>
         <div class="inline">
-          <input id="allN" type="number" min="1" value="1" aria-label="추가할 횟수">
+          <input id="allN" type="number" min="1" value="1" aria-label="조정할 횟수">
           <span>번씩</span>
           <button class="btn sm" id="btnAll">전원 추가</button>
+          <button class="btn sm ghost" id="btnAllMinus">전원 회수</button>
         </div>
+        <p class="note">회수는 이미 사용한 횟수 아래로는 내려가지 않아요.</p>
       </div>
 
       <div class="tablewrap">
@@ -499,10 +503,15 @@ $('adminSeg').addEventListener('click', e => {
   adminRoom = b.dataset.k; renderSeg(); loadAdmin();
 });
 
+let adminBusy = false;
 async function adminCall(fn, ...args) {
+  if (adminBusy) return false;
+  adminBusy = true;
+  document.querySelectorAll('#adminMain button').forEach(b => b.disabled = true);
   $('tableErr').textContent = '';
   try { adminData = await call(fn, pw, adminRoom, ...args); renderAdmin(); return true; }
   catch (e) { $('tableErr').textContent = e.message; return false; }
+  finally { adminBusy = false; document.querySelectorAll('#adminMain button').forEach(b => b.disabled = false); }
 }
 function loadAdmin() { $('aBody').innerHTML = '<tr><td colspan="8">불러오는 중…</td></tr>'; return adminCall('api_admin_list'); }
 
@@ -524,6 +533,7 @@ function renderAdmin() {
       <td><div class="acts">
         <button data-a="save">저장</button>
         <button data-a="plus">+1회</button>
+        <button data-a="minus">-1회</button>
         <button data-a="copy">안내문 복사</button>
         <button data-a="del" class="del">삭제</button>
       </div></td>
@@ -540,8 +550,18 @@ async function adminCallWithErr(errId, fn, ...args) {
   catch (e) { $(errId).textContent = e.message; return false; }
 }
 $('btnAll').onclick = async () => {
-  const n = $('allN').value;
+  const n = Math.abs(parseInt($('allN').value, 10) || 0);
   if (await adminCall('api_admin_addPlays', '', n)) toast(`${ROOMS[adminRoom]} 전원에게 ${n}번씩 추가했어요`);
+};
+$('btnAllMinus').onclick = async () => {
+  const b = $('btnAllMinus'), n = Math.abs(parseInt($('allN').value, 10) || 0);
+  if (!b.classList.contains('sure')) {
+    b.classList.add('sure'); b.textContent = `정말 ${n}번씩 회수`;
+    setTimeout(() => { b.classList.remove('sure'); b.textContent = '전원 회수'; }, 3000);
+    return;
+  }
+  b.classList.remove('sure'); b.textContent = '전원 회수';
+  if (await adminCall('api_admin_addPlays', '', -n)) toast(`${ROOMS[adminRoom]} 전원에게서 ${n}번씩 회수했어요`);
 };
 
 $('aBody').addEventListener('click', async e => {
@@ -553,6 +573,8 @@ $('aBody').addEventListener('click', async e => {
     if (await adminCall('api_admin_update', code, f)) toast('저장했어요');
   } else if (a === 'plus') {
     if (await adminCall('api_admin_addPlays', code, 1)) toast('사다리 1번 추가했어요');
+  } else if (a === 'minus') {
+    if (await adminCall('api_admin_addPlays', code, -1)) toast('사다리 1번 회수했어요');
   } else if (a === 'copy') {
     const name = tr.querySelector('[data-f="name"]').value;
     const msg = `[11월 이벤트 · 빼빼로를 모아라!]\n${name}님, ${ROOMS[adminRoom]} 사다리 이벤트에 초대합니다.\n참여 링크: ${APP_URL}\n첫 화면에서 '${ROOMS[adminRoom]} 이벤트'를 누르고 성함·연락처·틱톡 아이디를 입력해주세요.\n빼빼로를 가장 많이 모은 분께 경품을 드려요!`;
