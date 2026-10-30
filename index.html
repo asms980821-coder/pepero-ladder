@@ -192,9 +192,9 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
       <div class="form">
         <label for="inName">성함 *<input id="inName" autocomplete="name"></label>
         <label for="inPhone">연락처 (휴대폰) *<input id="inPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678 (- 없어도 돼요)"></label>
-        <label for="inTt" class="full2">틱톡 아이디 *<input id="inTt" autocapitalize="off" autocorrect="off" placeholder="아이디만 입력 (예: offair_kr)"></label>
+        <label for="inTt" class="full2">플랫폼 아이디 *<input id="inTt" autocapitalize="off" autocorrect="off" placeholder="아이디만 입력 (예: offair_kr)"></label>
       </div>
-      <p class="note">처음이면 이 정보로 자동 등록돼요. 다음부터는 같은 성함과 연락처로 들어오면 내 기록이 이어져요. 연락처와 틱톡 아이디는 공개되지 않아요.</p>
+      <p class="note">처음이면 이 정보로 자동 등록돼요. 다음부터는 같은 성함과 연락처로 들어오면 내 기록이 이어져요. 연락처와 플랫폼 아이디는 공개되지 않아요.</p>
       <button class="btn" id="btnLogin">입장하기</button>
       <p class="err" id="loginErr"></p>
     </div>
@@ -245,7 +245,7 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
         <div class="form">
           <label for="aName">이름<input id="aName"></label>
           <label for="aGranted">사다리 횟수<input id="aGranted" type="number" min="0" value="3"></label>
-          <label for="aTt">틱톡 아이디 (선택)<input id="aTt" autocapitalize="off" placeholder="예: offair_kr"></label>
+          <label for="aTt">플랫폼 아이디 (선택)<input id="aTt" autocapitalize="off" placeholder="예: offair_kr"></label>
           <label for="aPhone">연락처<input id="aPhone" inputmode="tel" placeholder="01012345678"></label>
         </div>
         <button class="btn sm" id="btnAdd">등록</button>
@@ -265,7 +265,7 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
 
       <div class="tablewrap">
         <table>
-          <thead><tr><th>성함</th><th>틱톡 아이디</th><th>연락처</th><th>지급</th><th>사용</th><th>남음</th><th>빼빼로</th><th>관리</th></tr></thead>
+          <thead><tr><th>성함</th><th>플랫폼 아이디</th><th>연락처</th><th>지급</th><th>사용</th><th>남음</th><th>빼빼로</th><th>관리</th></tr></thead>
           <tbody id="aBody"></tbody>
         </table>
       </div>
@@ -524,7 +524,7 @@ function renderAdmin() {
   $('aBody').innerHTML = d.list.length ? d.list.map(x => `
     <tr data-code="${esc(x.code)}">
       <td><input data-f="name" value="${esc(x.name)}" aria-label="이름"></td>
-      <td><input data-f="tt" value="${esc(x.tt)}" aria-label="틱톡 아이디"></td>
+      <td><input data-f="tt" value="${esc(x.tt)}" aria-label="플랫폼 아이디"></td>
       <td><input data-f="phone" value="${esc(x.phone)}" aria-label="연락처"></td>
       <td><input class="num" data-f="granted" type="number" min="${x.used}" value="${x.granted}" aria-label="지급 횟수"></td>
       <td class="mono">${x.used}</td>
@@ -577,7 +577,7 @@ $('aBody').addEventListener('click', async e => {
     if (await adminCall('api_admin_addPlays', code, -1)) toast('사다리 1번 회수했어요');
   } else if (a === 'copy') {
     const name = tr.querySelector('[data-f="name"]').value;
-    const msg = `[11월 이벤트 · 빼빼로를 모아라!]\n${name}님, ${ROOMS[adminRoom]} 사다리 이벤트에 초대합니다.\n참여 링크: ${APP_URL}\n첫 화면에서 '${ROOMS[adminRoom]} 이벤트'를 누르고 성함·연락처·틱톡 아이디를 입력해주세요.\n빼빼로를 가장 많이 모은 분께 경품을 드려요!`;
+    const msg = `[11월 이벤트 · 빼빼로를 모아라!]\n${name}님, ${ROOMS[adminRoom]} 사다리 이벤트에 초대합니다.\n참여 링크: ${APP_URL}\n첫 화면에서 '${ROOMS[adminRoom]} 이벤트'를 누르고 성함·연락처·플랫폼 아이디를 입력해주세요.\n빼빼로를 가장 많이 모은 분께 경품을 드려요!`;
     try { await navigator.clipboard.writeText(msg); toast('안내문을 복사했어요'); }
     catch (err) { $('tableErr').textContent = '복사가 막혀 있어요. 아래 문구를 직접 복사해주세요: ' + msg.replace(/\n/g, ' / '); }
   } else if (a === 'del') {
