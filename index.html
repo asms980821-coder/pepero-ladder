@@ -341,9 +341,6 @@ function show(v) {
 $('rooms').innerHTML = Object.keys(ROOMS).map(k => `
   <div class="room ${k}">
     <button class="go" data-room="${k}">${ROOMS[k]} 이벤트<small>사다리 타러 가기 ♥</small></button>
-    <div class="info">
-      <p class="rule">방송 ${RULES[k].hours}시간당 1회<br>다이아 ${RULES[k].dia}당 1회</p>
-    </div>
     <div class="rank">
       <h3>${ROOMS[k]} 순위</h3>
       <ol id="top_${k}"><li>불러오는 중…</li></ol>
