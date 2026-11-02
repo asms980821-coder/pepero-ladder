@@ -30,6 +30,7 @@ body{margin:0;color:var(--fg);font-family:var(--body);font-size:15px;line-height
   background-image:radial-gradient(circle at 12% 8%,#fff 0,transparent 32%),radial-gradient(circle at 90% 30%,#ffe3ea 0,transparent 30%),radial-gradient(circle at 50% 100%,#f9cfdb 0,transparent 45%);
   background-attachment:fixed}
 .wrap{max-width:620px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+.wrap.wide{max-width:1180px}
 [hidden]{display:none!important}
 button{font:inherit;cursor:pointer}
 button:focus-visible,input:focus-visible{outline:3px solid var(--pink2);outline-offset:2px}
@@ -40,7 +41,8 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--pink2);outline-
 .card strong{font-family:var(--display);font-weight:400;font-size:18px;color:var(--choco)}
 .err{color:var(--pink);font-size:14px;margin:0;min-height:1em;font-weight:700}
 input{font:inherit;font-size:16px;padding:11px 13px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg2);color:var(--fg);width:100%}
-input::placeholder{color:#c79aa3}
+input::placeholder,textarea::placeholder{color:#c79aa3}
+textarea{font:inherit;font-family:var(--mono);font-size:13px;padding:10px 12px;border:1.5px solid var(--line);border-radius:14px;background:var(--bg2);color:var(--fg);width:100%;resize:vertical}
 label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:700}
 .btn{font-family:var(--display);font-size:20px;border:0;border-radius:999px;padding:12px 22px;background:var(--pink);color:#fff;box-shadow:0 4px 0 #b92f5d}
 .btn:active{transform:translateY(2px);box-shadow:0 2px 0 #b92f5d}
@@ -90,6 +92,11 @@ label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute
 .room .go:hover{filter:brightness(.98)}
 .room.fruit .go{background:var(--fruit);color:var(--fruit-ink)}
 .room.sprout .go{background:var(--sprout);color:var(--sprout-ink)}
+.room .info{padding:12px 10px 10px;display:flex;flex-direction:column;gap:6px;text-align:center;border-bottom:1.5px dashed var(--pink3)}
+.room .rule{margin:0;font-size:13px;font-weight:700;color:var(--muted);line-height:1.4}
+.room .prizes{list-style:none;margin:0 0 8px;padding:0;display:flex;flex-direction:column;gap:2px;font-size:13px;word-break:keep-all}
+.room .prizes b{font-family:var(--display);font-weight:400;margin-right:4px}
+.room .prizes .r1 b{color:var(--gold)}.room .prizes .r2 b{color:var(--silver)}.room .prizes .r3 b{color:var(--bronze)}
 .room .rank{padding:12px 12px 14px;display:flex;flex-direction:column;gap:4px;text-align:center}
 .room .rank h3{margin:0 0 2px;font-family:var(--display);font-weight:400;font-size:17px;color:var(--choco)}
 .room ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px;font-size:14px;font-variant-numeric:tabular-nums}
@@ -130,6 +137,9 @@ label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute
 .result{text-align:center;font-family:var(--display);font-weight:400;font-size:32px;margin:0;min-height:1.2em;color:var(--pink)}
 .hint{text-align:center;color:var(--muted);margin:0;font-size:14px}
 .note{margin:0;font-size:13px;color:var(--muted)}
+.sync{margin:0;font-size:13px;font-weight:700;color:var(--sprout-ink);background:var(--sprout);border-radius:10px;padding:6px 10px;align-self:flex-start}
+.activity{margin:0;font-size:13px;color:var(--muted);text-align:center;background:var(--bg2);border-radius:12px;padding:8px 10px}
+.activity b{color:var(--choco)}
 .form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .form .full2{grid-column:1/-1}
 @media (max-width:440px){.form{grid-template-columns:1fr}}
@@ -144,12 +154,15 @@ label{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--mute
 .inline{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .inline input{width:80px}
 .tablewrap{overflow-x:auto;border:2px solid var(--pink3);border-radius:16px;background:#fff}
-table{border-collapse:collapse;width:100%;min-width:720px;font-size:13px;font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;width:100%;min-width:1080px;font-size:13px;font-variant-numeric:tabular-nums}
 th{background:var(--pink3);text-align:left;padding:8px;font-size:12px;color:var(--choco);white-space:nowrap}
 td{padding:6px 8px;border-top:1px solid var(--line);vertical-align:middle;white-space:nowrap}
 td input{width:100%;min-width:70px;font-size:13px;padding:6px 8px;border-radius:8px}
-td input.num{width:60px;min-width:0}
+td input.num{width:64px;min-width:0}
+td input.num.wide{width:84px}
 td .mono{font-family:var(--mono)}
+.link-dot{display:inline-block;font-size:11px;font-weight:700;border-radius:999px;padding:1px 7px;margin-bottom:3px}
+.link-dot.on{background:var(--sprout);color:var(--sprout-ink)}.link-dot.off{background:#ffe1e1;color:#b3261e}
 td .acts{display:flex;gap:4px}
 td .acts button{border:1px solid var(--line);background:#fff;color:var(--fg);border-radius:8px;padding:5px 8px;font-size:12px;font-weight:700}
 td .acts button.del{color:var(--pink)}
@@ -175,7 +188,7 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
     <div class="cloud">
       <p class="big">11월 통 이벤트!</p>
       <span class="pill">빼빼로를 모아라!</span>
-      <p>빼빼로 개수가 많은 순서대로 경품 지급</p>
+      <p>방송 시간과 다이아만큼 사다리 기회가 쌓이고,<br>사다리에서 빼빼로를 많이 모은 순서대로 경품 지급!</p>
       <p class="tax">경품 5만원 이상 시 제세공과금 지급 안내 예정</p>
     </div>
     <div class="rooms" id="rooms"></div>
@@ -192,9 +205,9 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
       <div class="form">
         <label for="inName">성함 *<input id="inName" autocomplete="name"></label>
         <label for="inPhone">연락처 (휴대폰) *<input id="inPhone" inputmode="tel" autocomplete="tel" placeholder="01012345678 (- 없어도 돼요)"></label>
-        <label for="inTt" class="full2">플랫폼 아이디 *<input id="inTt" autocapitalize="off" autocorrect="off" placeholder="아이디만 입력 (예: offair_kr)"></label>
+        <label for="inTt" class="full2">플랫폼 아이디 또는 닉네임 *<input id="inTt" autocapitalize="off" autocorrect="off" placeholder="예: youki_1223 또는 방송 닉네임"></label>
       </div>
-      <p class="note">처음이면 이 정보로 자동 등록돼요. 다음부터는 같은 성함과 연락처로 들어오면 내 기록이 이어져요. 연락처와 플랫폼 아이디는 공개되지 않아요.</p>
+      <p class="note">처음 들어올 때 아이디(닉네임)로 내 방송 기록(방송 시간·다이아)과 연결돼요. 다음부터는 같은 성함과 연락처만 입력하면 돼요. 연락처와 아이디는 공개되지 않아요.</p>
       <button class="btn" id="btnLogin">입장하기</button>
       <p class="err" id="loginErr"></p>
     </div>
@@ -205,6 +218,7 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
         <div class="stat"><span>남은 사다리</span><b id="stRemain">0</b></div>
         <div class="stat"><span>모은 빼빼로</span><b id="stPep">0</b></div>
       </div>
+      <p class="activity" id="activity"></p>
       <div class="ladder" id="ladderBox">
         <span class="bubble">어떤 빼빼로가<br>나올까?!</span>
         <div class="picks" id="picks"></div>
@@ -240,13 +254,23 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
       </div>
 
       <div class="card">
+        <p class="sync" id="syncInfo"></p>
+        <strong>백스테이지 기록 붙여넣기 (수동)</strong>
+        <p class="note">엑셀에서 <b>닉네임 · 방송 시간 · 다이아</b> 세 칸을 그대로 복사해서 붙여넣으세요. 제목 줄은 같이 붙여도 돼요. 방송 시간과 다이아는 <b>누적값</b>으로 덮어쓰고, 사다리 횟수는 자동으로 계산돼요. 명단에 없는 닉네임은 이 방에 새로 등록돼요.</p>
+        <textarea id="impText" rows="6" placeholder="닉네임&#9;방송시간&#9;다이아&#10;빼빼로짱&#9;7:30:00&#9;45000&#10;새싹이&#9;3.5&#9;12,500"></textarea>
+        <p class="note">방송 시간은 7:30, 7:30:00, 7.5, 450분, 7시간 30분 모두 돼요. 다이아는 45000, 45,000, 45K 모두 돼요.</p>
+        <button class="btn sm" id="btnImp">붙여넣은 기록 반영</button>
+        <p class="err" id="impMsg"></p>
+      </div>
+
+      <div class="card">
         <strong>참가자 직접 등록</strong>
-        <p class="note">크리에이터가 앱에서 직접 입장하면 자동으로 등록돼요. 미리 등록해두고 싶을 때만 쓰세요.</p>
+        <p class="note">보통은 위 붙여넣기나 크리에이터 입장으로 자동 등록돼요. 한 명만 따로 넣을 때 쓰세요.</p>
         <div class="form">
-          <label for="aName">이름<input id="aName"></label>
-          <label for="aGranted">사다리 횟수<input id="aGranted" type="number" min="0" value="3"></label>
-          <label for="aTt">플랫폼 아이디 (선택)<input id="aTt" autocapitalize="off" placeholder="예: offair_kr"></label>
-          <label for="aPhone">연락처<input id="aPhone" inputmode="tel" placeholder="01012345678"></label>
+          <label for="aTt">플랫폼 아이디 또는 닉네임 *<input id="aTt" autocapitalize="off"></label>
+          <label for="aGranted">추가 지급 사다리<input id="aGranted" type="number" min="0" value="0"></label>
+          <label for="aName">성함 (선택)<input id="aName"></label>
+          <label for="aPhone">연락처 (선택)<input id="aPhone" inputmode="tel" placeholder="01012345678"></label>
         </div>
         <button class="btn sm" id="btnAdd">등록</button>
         <p class="err" id="addErr"></p>
@@ -257,15 +281,15 @@ td .acts button.del.sure{background:var(--pink);color:#fff;border-color:var(--pi
         <div class="inline">
           <input id="allN" type="number" min="1" value="1" aria-label="조정할 횟수">
           <span>번씩</span>
-          <button class="btn sm" id="btnAll">전원 추가</button>
+          <button class="btn sm" id="btnAll">전원 추가 지급</button>
           <button class="btn sm ghost" id="btnAllMinus">전원 회수</button>
         </div>
-        <p class="note">회수는 이미 사용한 횟수 아래로는 내려가지 않아요.</p>
+        <p class="note">방송·다이아로 받은 자동 지급과 별개로, 이벤트 보너스나 실수 정정용이에요. 회수는 이미 사용한 횟수 아래로는 내려가지 않아요.</p>
       </div>
 
       <div class="tablewrap">
         <table>
-          <thead><tr><th>성함</th><th>플랫폼 아이디</th><th>연락처</th><th>지급</th><th>사용</th><th>남음</th><th>빼빼로</th><th>관리</th></tr></thead>
+          <thead><tr><th>아이디/닉네임</th><th>성함</th><th>연락처</th><th>방송 시간</th><th>다이아</th><th>자동</th><th>추가</th><th>총 지급</th><th>사용</th><th>남음</th><th>빼빼로</th><th>관리</th></tr></thead>
           <tbody id="aBody"></tbody>
         </table>
       </div>
@@ -281,6 +305,7 @@ const API_URL = 'https://script.google.com/macros/s/AKfycbyhwyqRuD--n9RIpu47RVdr
 
 const ROOMS = { fruit: '열매방', sprout: '새싹방' };
 const ANIMALS = ['병아리', '악어', '티라노사우루스'];
+const RULES = { fruit: { hours: 3, dia: '20K' }, sprout: { hours: 3, dia: '5K' } };
 const APP_URL = location.origin;
 const ICONS = ['🐥', '🐊', '🦖'];
 const X = [50, 150, 250], TOP = 8, BOT = 252;
@@ -306,6 +331,7 @@ function esc(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<'
 
 function show(v) {
   ['vHome', 'vRoom', 'vAdmin'].forEach(id => $(id).hidden = id !== v);
+  document.querySelector('.wrap').classList.toggle('wide', v === 'vAdmin');
   clearInterval(homeTimer);
   if (v === 'vHome') { loadHome(); homeTimer = setInterval(loadHome, 20000); }
   window.scrollTo(0, 0);
@@ -315,6 +341,9 @@ function show(v) {
 $('rooms').innerHTML = Object.keys(ROOMS).map(k => `
   <div class="room ${k}">
     <button class="go" data-room="${k}">${ROOMS[k]} 이벤트<small>사다리 타러 가기 ♥</small></button>
+    <div class="info">
+      <p class="rule">방송 ${RULES[k].hours}시간당 1회<br>다이아 ${RULES[k].dia}당 1회</p>
+    </div>
     <div class="rank">
       <h3>${ROOMS[k]} 순위</h3>
       <ol id="top_${k}"><li>불러오는 중…</li></ol>
@@ -384,7 +413,10 @@ function renderMe() {
   $('hello').textContent = me.name + '님, 반가워요!';
   $('stRemain').textContent = me.remain;
   $('stPep').textContent = me.pepero;
+  const r = RULES[room];
+  $('activity').innerHTML = `내 방송 <b>${fmtH(me.hours)}</b> · 다이아 <b>${Number(me.dia || 0).toLocaleString('ko-KR')}</b> · 받은 사다리 <b>${me.granted || 0}번</b><br>방송 ${r.hours}시간 · 다이아 ${r.dia}마다 1번씩 자동으로 쌓여요 (백스테이지 기록 기준, 하루 몇 번 갱신)`;
 }
+function fmtH(h) { h = Number(h) || 0; const H = Math.floor(h), M = Math.round((h - H) * 60); return M ? `${H}시간 ${M}분` : `${H}시간`; }
 
 function drawLadder(rs) {
   const step = (BOT - TOP) / (rs.length + 1);
@@ -513,20 +545,26 @@ async function adminCall(fn, ...args) {
   catch (e) { $('tableErr').textContent = e.message; return false; }
   finally { adminBusy = false; document.querySelectorAll('#adminMain button').forEach(b => b.disabled = false); }
 }
-function loadAdmin() { $('aBody').innerHTML = '<tr><td colspan="8">불러오는 중…</td></tr>'; return adminCall('api_admin_list'); }
+function loadAdmin() { $('aBody').innerHTML = '<tr><td colspan="12">불러오는 중…</td></tr>'; return adminCall('api_admin_list'); }
 
 function renderAdmin() {
   const d = adminData;
   $('sPeople').textContent = d.total.people;
+  const nl = d.list.filter(x => !x.linked).length;
+  $('syncInfo').textContent = (d.lastSync ? `백스테이지 자동 반영: 마지막 ${d.lastSync}` : '백스테이지 자동 반영: 아직 없음') + (d.lastSync && nl ? ` · 미연결 ${nl}명 (아이디 확인 필요)` : '');
   $('sGranted').textContent = d.total.granted;
   $('sUsed').textContent = d.total.used;
   $('sPep').textContent = d.total.pepero;
   $('aBody').innerHTML = d.list.length ? d.list.map(x => `
     <tr data-code="${esc(x.code)}">
-      <td><input data-f="name" value="${esc(x.name)}" aria-label="이름"></td>
-      <td><input data-f="tt" value="${esc(x.tt)}" aria-label="플랫폼 아이디"></td>
-      <td><input data-f="phone" value="${esc(x.phone)}" aria-label="연락처"></td>
-      <td><input class="num" data-f="granted" type="number" min="${x.used}" value="${x.granted}" aria-label="지급 횟수"></td>
+      <td><span class="link-dot ${x.linked ? 'on' : 'off'}" title="${x.linked ? '백스테이지 연결됨' : '백스테이지에서 못 찾음'}">${x.linked ? '연결' : '미연결'}</span><input data-f="tt" value="${esc(x.tt)}" aria-label="아이디/닉네임"></td>
+      <td><input data-f="name" value="${esc(x.name)}" aria-label="성함" placeholder="미입장"></td>
+      <td><input data-f="phone" value="${esc(x.phone)}" aria-label="연락처" placeholder="미입장"></td>
+      <td><input class="num" data-f="hours" value="${x.hours}" aria-label="방송 시간(시간)"></td>
+      <td><input class="num wide" data-f="dia" value="${x.dia}" aria-label="다이아"></td>
+      <td class="mono">${x.auto}</td>
+      <td class="mono">${x.bonus > 0 ? '+' : ''}${x.bonus}</td>
+      <td class="mono"><b>${x.granted}</b></td>
       <td class="mono">${x.used}</td>
       <td class="mono">${x.remain}</td>
       <td class="mono"><b>${x.pepero}</b></td>
@@ -537,21 +575,35 @@ function renderAdmin() {
         <button data-a="copy">안내문 복사</button>
         <button data-a="del" class="del">삭제</button>
       </div></td>
-    </tr>`).join('') : `<tr><td colspan="8">${ROOMS[adminRoom]}에 등록된 참가자가 없어요. 위에서 등록해주세요.</td></tr>`;
+    </tr>`).join('') : `<tr><td colspan="12">${ROOMS[adminRoom]}에 등록된 참가자가 없어요. 위에서 등록해주세요.</td></tr>`;
 }
 
 $('btnAdd').onclick = async () => {
   $('addErr').textContent = '';
   const ok = await adminCallWithErr('addErr', 'api_admin_add', $('aName').value, $('aTt').value, $('aPhone').value, $('aGranted').value);
-  if (ok) { ['aName', 'aTt', 'aPhone'].forEach(id => $(id).value = ''); $('aName').focus(); toast('등록했어요'); }
+  if (ok) { ['aName', 'aTt', 'aPhone'].forEach(id => $(id).value = ''); $('aGranted').value = 0; $('aTt').focus(); toast('등록했어요'); }
 };
 async function adminCallWithErr(errId, fn, ...args) {
   try { adminData = await call(fn, pw, adminRoom, ...args); renderAdmin(); return true; }
   catch (e) { $(errId).textContent = e.message; return false; }
 }
+$('btnImp').onclick = async () => {
+  $('impMsg').textContent = '';
+  const text = $('impText').value;
+  if (!text.trim()) { $('impMsg').textContent = '엑셀에서 복사한 내용을 먼저 붙여넣어 주세요.'; return; }
+  try {
+    document.querySelectorAll('#adminMain button').forEach(b => b.disabled = true);
+    adminData = await call('api_admin_import', pw, adminRoom, text); renderAdmin();
+    const r = adminData.report;
+    $('impText').value = '';
+    toast(`반영 완료 · 갱신 ${r.updated}명 · 신규 ${r.created}명`);
+    $('impMsg').textContent = r.skipped.length ? '건너뜀: ' + r.skipped.join(', ') : '';
+  } catch (e) { $('impMsg').textContent = e.message; }
+  finally { document.querySelectorAll('#adminMain button').forEach(b => b.disabled = false); }
+};
 $('btnAll').onclick = async () => {
   const n = Math.abs(parseInt($('allN').value, 10) || 0);
-  if (await adminCall('api_admin_addPlays', '', n)) toast(`${ROOMS[adminRoom]} 전원에게 ${n}번씩 추가했어요`);
+  if (await adminCall('api_admin_addPlays', '', n)) toast(`${ROOMS[adminRoom]} 전원에게 ${n}번씩 추가 지급했어요`);
 };
 $('btnAllMinus').onclick = async () => {
   const b = $('btnAllMinus'), n = Math.abs(parseInt($('allN').value, 10) || 0);
@@ -576,8 +628,8 @@ $('aBody').addEventListener('click', async e => {
   } else if (a === 'minus') {
     if (await adminCall('api_admin_addPlays', code, -1)) toast('사다리 1번 회수했어요');
   } else if (a === 'copy') {
-    const name = tr.querySelector('[data-f="name"]').value;
-    const msg = `[11월 이벤트 · 빼빼로를 모아라!]\n${name}님, ${ROOMS[adminRoom]} 사다리 이벤트에 초대합니다.\n참여 링크: ${APP_URL}\n첫 화면에서 '${ROOMS[adminRoom]} 이벤트'를 누르고 성함·연락처·플랫폼 아이디를 입력해주세요.\n빼빼로를 가장 많이 모은 분께 경품을 드려요!`;
+    const name = tr.querySelector('[data-f="name"]').value || tr.querySelector('[data-f="tt"]').value;
+    const msg = `[11월 이벤트 · 빼빼로를 모아라!]\n${name}님, ${ROOMS[adminRoom]} 사다리 이벤트에 초대합니다.\n참여 링크: ${APP_URL}\n첫 화면에서 '${ROOMS[adminRoom]} 이벤트'를 누르고 성함·연락처·틱톡 아이디(또는 닉네임)를 입력해주세요.\n방송 ${RULES[adminRoom].hours}시간, 다이아 ${RULES[adminRoom].dia}마다 사다리 1번!\n빼빼로를 많이 모은 순서대로 경품을 드려요!`;
     try { await navigator.clipboard.writeText(msg); toast('안내문을 복사했어요'); }
     catch (err) { $('tableErr').textContent = '복사가 막혀 있어요. 아래 문구를 직접 복사해주세요: ' + msg.replace(/\n/g, ' / '); }
   } else if (a === 'del') {
